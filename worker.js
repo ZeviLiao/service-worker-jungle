@@ -54,7 +54,13 @@ const cacheFirst = async (request) => {
   }
   const responseFromNetwork = await fetch(request);
   // We need to clone the response because the response stream can only be read once
-  putInCache(request, responseFromNetwork.clone());
+
+  const exceptKeywords = ["browser-sync", "chrome-extension:"];
+  if (
+    !exceptKeywords.some((keyword) => responseFromNetwork.url.includes(keyword))
+  ) {
+    putInCache(request, responseFromNetwork.clone());
+  }
   return responseFromNetwork;
 };
 
