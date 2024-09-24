@@ -1,34 +1,47 @@
-const version = 'v1'
+const version = "v1";
 
 const addResourcesToCache = async (resources) => {
   const cache = await caches.open(version);
   await cache.addAll(resources);
 };
 
-self.addEventListener('install', event => {
+self.addEventListener("install", (event) => {
   console.log(`${version} installing…`);
 
-  event.waitUntil(
-    addResourcesToCache([
-      "/",
-      "/index.html",
-      "/styles.css",
-      "/script.js",
-      "/jungle.png"
-    ])
-  );
+  // event.waitUntil(
+  //   addResourcesToCache([
+  //     "/",
+  //     "/index.html",
+  //     "/styles.css",
+  //     "/script.js",
+  //     "/jungle.png",
+  //   ])
+  // );
 });
 
-self.addEventListener('activate', event => {
-  console.log('Activate event')
+self.addEventListener("activate", (event) => {
+  console.log("Activate event");
+
+  // event.waitUntil(
+  //   caches.keys().then(function (cacheNames) {
+  //     var promiseArr = cacheNames.map(function (item) {
+  //       if (item !== version) {
+  //         return caches.delete(item);
+  //       }
+  //     });
+  //     return Promise.all(promiseArr);
+  //   })
+  //   // clients.claim() // no wait.
+  // );
+
 });
 
 const putInCache = async (request, response) => {
   const cache = await caches.open(version);
 
-  if (request.method === 'POST') {
-    console.log('Cannot cache POST requests')
-    return
+  if (request.method === "POST") {
+    console.log("Cannot cache POST requests");
+    return;
   }
 
   await cache.put(request, response);
@@ -41,8 +54,8 @@ const cacheFirst = async (request) => {
   }
   const responseFromNetwork = await fetch(request);
   // We need to clone the response because the response stream can only be read once
-  putInCache(request, responseFromNetwork.clone())
-  return responseFromNetwork
+  putInCache(request, responseFromNetwork.clone());
+  return responseFromNetwork;
 };
 
 self.addEventListener("fetch", (event) => {
