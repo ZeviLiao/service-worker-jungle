@@ -33,3 +33,6 @@ https://www.youtube.com/watch?v=1usuYqZMT7Q&ab_channel=RethinkingUI
 
 video2
 https://www.youtube.com/watch?v=ksXwaWHCW6k&t=1908s&ab_channel=TraversyMedia
+
+cache time expired
+https://gomakethings.com/how-to-set-an-expiration-date-for-items-in-a-service-worker-cache/
