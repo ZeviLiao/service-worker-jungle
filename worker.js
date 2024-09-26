@@ -12,27 +12,33 @@ self.addEventListener("install", (event) => {
   //   addResourcesToCache([
   //     "/",
   //     "/index.html",
+  //     "/about.html",
   //     "/styles.css",
   //     "/script.js",
   //     "/jungle.png",
   //   ])
   // );
+  self.skipWaiting(); // Force the waiting service worker to become active immediately
 });
 
 self.addEventListener("activate", (event) => {
   console.log("Activate event");
 
-  // event.waitUntil(
-  //   caches.keys().then(function (cacheNames) {
-  //     var promiseArr = cacheNames.map(function (item) {
-  //       if (item !== version) {
-  //         return caches.delete(item);
-  //       }
-  //     });
-  //     return Promise.all(promiseArr);
-  //   })
-  //   // clients.claim() // no wait.
-  // );
+  event.waitUntil(
+    caches
+      .keys()
+      .then(function (cacheNames) {
+        var promiseArr = cacheNames.map(function (item) {
+          if (item !== version) {
+            return caches.delete(item);
+          }
+        });
+        return Promise.all(promiseArr);
+      })
+      .then(() => {
+        return clients.claim(); // Immediately take control of the clients
+      })
+  );
 });
 
 const putInCache = async (request, response) => {
